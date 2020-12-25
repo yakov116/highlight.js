@@ -8,17 +8,18 @@
 export default function(hljs) {
   var COMMENT_MODE = hljs.COMMENT('--', '$');
   return {
-    name: 'SQL',
+    name: "SQL",
+	subLanguage: 'variable',  relevance: 10,
     case_insensitive: true,
     illegal: /[<>{}*]/,
     contains: [
       {
         beginKeywords:
-          'begin end start commit rollback savepoint lock alter create drop rename call ' +
+          'IIF From begin end start commit rollback savepoint lock alter create drop rename call ' +
           'delete do handler insert load replace select truncate update set show pragma grant ' +
           'merge describe use explain help declare prepare execute deallocate release ' +
-          'unlock purge reset change stop analyze cache flush optimize repair kill ' +
-          'install uninstall checksum restore check backup revoke comment values with',
+          'unlock purge reset change stop analyze cache flush optimize repair kill DateAdd ' +
+          'install uninstall checksum restore check backup revoke comment with values Format where',
         end: /;/, endsWithParent: true,
         keywords: {
           $pattern: /[\w\.]+/,
@@ -137,9 +138,19 @@ export default function(hljs) {
             'true false null unknown',
           built_in:
             'array bigint binary bit blob bool boolean char character date dec decimal float int int8 integer interval number ' +
-            'numeric real record serial serial8 smallint text time timestamp tinyint varchar varchar2 varying void'
+            'numeric real record serial serial8 smallint text time timestamp tinyint varchar varying void',
+		  variable:
+		  'Companies '
         },
         contains: [
+ 		  {
+				begin: '\'My+', end: '\'',
+				subLanguage: 'variable'
+		  },
+		  {
+				begin: 'My+',
+				subLanguage: 'variable'
+		  },
           {
             className: 'string',
             begin: '\'', end: '\'',
@@ -156,13 +167,11 @@ export default function(hljs) {
           },
           hljs.C_NUMBER_MODE,
           hljs.C_BLOCK_COMMENT_MODE,
-          COMMENT_MODE,
-          hljs.HASH_COMMENT_MODE
+          COMMENT_MODE
         ]
       },
       hljs.C_BLOCK_COMMENT_MODE,
-      COMMENT_MODE,
-      hljs.HASH_COMMENT_MODE
+      COMMENT_MODE
     ]
   };
 }
